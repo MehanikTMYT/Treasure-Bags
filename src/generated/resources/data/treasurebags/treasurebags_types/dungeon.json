@@ -1,17 +1,18 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FF556B2F",
+  "bag_overlay_color": "#FFD3D3D3",
+  "bag_string_color": "#FF808080",
+  "display_name": {
     "translate": "bag.treasurebags.dungeon"
   },
-  "lootTable": "treasurebags:bags/dungeon",
-  "rarity": "rare",
-  "bagColor": "#556B2F",
-  "bagOverlayColor": "#D3D3D3",
-  "bagStringColor": "#808080",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "player",
     "boss",
     "hostile",
     "peaceful"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/dungeon",
+  "rarity": "rare",
+  "visible": true
 }

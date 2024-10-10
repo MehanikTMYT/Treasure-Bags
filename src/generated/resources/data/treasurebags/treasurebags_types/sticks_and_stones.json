@@ -1,17 +1,18 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FF708090",
+  "bag_overlay_color": "#FFD2691E",
+  "bag_string_color": "#FFD3D3D3",
+  "display_name": {
     "translate": "bag.treasurebags.sticks_and_stones"
   },
-  "lootTable": "treasurebags:bags/sticks_and_stones",
-  "rarity": "common",
-  "bagColor": "#708090",
-  "bagOverlayColor": "#D2691E",
-  "bagStringColor": "#D3D3D3",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "player",
     "boss",
     "hostile",
     "peaceful"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/sticks_and_stones",
+  "rarity": "common",
+  "visible": true
 }

@@ -1,31 +1,20 @@
 package net.silentchaos512.treasurebags.data;
 
 import com.google.common.collect.Sets;
-import com.google.common.hash.Hashing;
-import com.google.common.hash.HashingOutputStream;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.stream.JsonWriter;
-import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Rarity;
-import net.silentchaos512.treasurebags.TreasureBags;
+import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.treasurebags.lib.Const;
 import net.silentchaos512.treasurebags.lib.StandardEntityGroups;
-import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +48,7 @@ public class BagTypesProvider implements DataProvider {
                 .colors(Color.DARKOLIVEGREEN, Color.LIGHTGRAY, Color.GRAY)
         );
 
-        ret.add(new BagTypeBuilder(Const.Bags.ENDER, "default", Rarity.EPIC, Const.LootTables.BAGS_ENDER)
+        ret.add(new BagTypeBuilder(Const.Bags.ENDER, "default", Rarity.RARE, Const.LootTables.BAGS_ENDER)
                 .dropsFromAllMobs()
                 .colors(Color.BLACK, Color.PURPLE, Color.DARKORCHID)
         );
@@ -67,6 +56,11 @@ public class BagTypesProvider implements DataProvider {
         ret.add(new BagTypeBuilder(Const.Bags.FOOD, "default", Rarity.COMMON, Const.LootTables.BAGS_FOOD)
                 .dropsFromAllMobs()
                 .colors(Color.WHITE, Color.RED, Color.PERU)
+        );
+
+        ret.add(new BagTypeBuilder(Const.Bags.GAG, "default", Rarity.UNCOMMON, Const.LootTables.BAGS_GAG)
+                .dropsFromAllMobs()
+                .colors(Color.INDIANRED, Color.ORANGE, Color.LIGHTGOLDENRODYELLOW)
         );
 
         ret.add(new BagTypeBuilder(Const.Bags.INGOTS, "default", Rarity.UNCOMMON, Const.LootTables.BAGS_INGOTS)
@@ -82,6 +76,16 @@ public class BagTypesProvider implements DataProvider {
         ret.add(new BagTypeBuilder(Const.Bags.NATURE, "default", Rarity.COMMON, Const.LootTables.BAGS_NATURE)
                 .dropsFromAllMobs()
                 .colors(Color.FORESTGREEN, Color.SIENNA, Color.OLIVE)
+        );
+
+        ret.add(new BagTypeBuilder(Const.Bags.NETHER, "default", Rarity.RARE, Const.LootTables.BAGS_NETHER)
+                .dropsFromAllMobs()
+                .colors(Color.DARKRED, Color.DARKVIOLET, Color.GOLD)
+        );
+
+        ret.add(new BagTypeBuilder(Const.Bags.OCEAN, "default", Rarity.RARE, Const.LootTables.BAGS_OCEAN)
+                .dropsFromAllMobs()
+                .colors(Color.MEDIUMBLUE, Color.LIGHTSEAGREEN, Color.ORANGE)
         );
 
         ret.add(new BagTypeBuilder(Const.Bags.PLAYER, "default", Rarity.EPIC, Const.LootTables.BAGS_PLAYER)
@@ -123,30 +127,9 @@ public class BagTypesProvider implements DataProvider {
 
             entries.add(builder.bagTypeId);
             Path path = outputFolder.resolve(String.format("data/%s/treasurebags_types/%s.json", builder.bagTypeId.getNamespace(), builder.bagTypeId.getPath()));
-            list.add(saveStable(cache, builder.serialize(), path));
+            list.add(DataProvider.saveStable(cache, builder.serialize(), path));
         });
 
         return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));
-    }
-
-    public static CompletableFuture<?> saveStable(CachedOutput p_253653_, JsonElement p_254542_, Path p_254467_) {
-        // Slightly modified version of DataProvider.saveStable. Only difference is that this one does not sort keys!
-        return CompletableFuture.runAsync(() -> {
-            try {
-                ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-                HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha1(), bytearrayoutputstream);
-
-                try (JsonWriter jsonwriter = new JsonWriter(new OutputStreamWriter(hashingoutputstream, StandardCharsets.UTF_8))) {
-                    jsonwriter.setSerializeNulls(false);
-                    jsonwriter.setIndent("  ");
-                    GsonHelper.writeValue(jsonwriter, p_254542_, null);
-                }
-
-                p_253653_.writeIfNeeded(p_254467_, bytearrayoutputstream.toByteArray(), hashingoutputstream.hash());
-            } catch (IOException ioexception) {
-                TreasureBags.LOGGER.error("Failed to save file to {}", p_254467_, ioexception);
-            }
-
-        }, Util.backgroundExecutor());
     }
 }

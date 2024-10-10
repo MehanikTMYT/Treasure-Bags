@@ -1,33 +1,47 @@
 package net.silentchaos512.treasurebags.crafting.ingredient;
 
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.silentchaos512.treasurebags.TreasureBags;
-import net.silentchaos512.treasurebags.lib.BagTypeManager;
-import net.silentchaos512.treasurebags.lib.IBagType;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
+import net.silentchaos512.treasurebags.setup.TbDataComponents;
 import net.silentchaos512.treasurebags.setup.TbItems;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public final class TreasureBagIngredient extends Ingredient {
+public final class TreasureBagIngredient implements ICustomIngredient {
+    public static final MapCodec<TreasureBagIngredient> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    ResourceLocation.CODEC.fieldOf("bag_type").forGetter(ingredient -> ingredient.typeName)
+            ).apply(instance, TreasureBagIngredient::new)
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, TreasureBagIngredient> STREAM_CODEC = StreamCodec.composite(
+            ResourceLocation.STREAM_CODEC, ingredient -> ingredient.typeName,
+            TreasureBagIngredient::new
+    );
+
     // Store bag type ID because the bag types likely don't exist yet
     private final ResourceLocation typeName;
 
     private TreasureBagIngredient(ResourceLocation typeName) {
-        super(Stream.of(new ItemValue(TbItems.TREASURE_BAG.get().stackOfType(typeName))));
         this.typeName = typeName;
     }
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        IBagType bagType = BagTypeManager.typeFromBag(stack);
-        return bagType != null && bagType.getId().equals(this.typeName);
+        var stackBagId = stack.get(TbDataComponents.BAG_TYPE);
+        return this.typeName.equals(stackBagId);
+    }
+
+    @Override
+    public Stream<ItemStack> getItems() {
+        return Stream.of(TbItems.TREASURE_BAG.get().stackOfType(this.typeName));
     }
 
     @Override
@@ -36,27 +50,7 @@ public final class TreasureBagIngredient extends Ingredient {
     }
 
     @Override
-    public IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return Serializer.INSTANCE;
-    }
-
-    public static class Serializer implements IIngredientSerializer<TreasureBagIngredient> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation NAME = TreasureBags.getId("bag");
-
-        @Override
-        public TreasureBagIngredient parse(FriendlyByteBuf buffer) {
-            return new TreasureBagIngredient(buffer.readResourceLocation());
-        }
-
-        @Override
-        public TreasureBagIngredient parse(JsonObject json) {
-            return new TreasureBagIngredient(IBagType.nameFromJson(json));
-        }
-
-        @Override
-        public void write(FriendlyByteBuf buffer, TreasureBagIngredient ingredient) {
-            buffer.writeResourceLocation(ingredient.typeName);
-        }
+    public IngredientType<?> getType() {
+        return null;
     }
 }

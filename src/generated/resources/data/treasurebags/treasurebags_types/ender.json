@@ -1,17 +1,18 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FF000000",
+  "bag_overlay_color": "#FF800080",
+  "bag_string_color": "#FF9932CC",
+  "display_name": {
     "translate": "bag.treasurebags.ender"
   },
-  "lootTable": "treasurebags:bags/ender",
-  "rarity": "epic",
-  "bagColor": "#000000",
-  "bagOverlayColor": "#800080",
-  "bagStringColor": "#9932CC",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "player",
     "boss",
     "hostile",
     "peaceful"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/ender",
+  "rarity": "rare",
+  "visible": true
 }

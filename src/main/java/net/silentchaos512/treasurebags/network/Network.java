@@ -1,33 +1,27 @@
 package net.silentchaos512.treasurebags.network;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraft.network.chat.Component;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.silentchaos512.treasurebags.TreasureBags;
-import net.silentchaos512.treasurebags.lib.BagTypeManager;
+import net.silentchaos512.treasurebags.network.payload.SyncBagTypesPayload;
+import net.silentchaos512.treasurebags.setup.TbRegistries;
 
-import java.util.Objects;
-
+@EventBusSubscriber(modid = TreasureBags.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class Network {
-    private static final ResourceLocation NAME = TreasureBags.getId("network");
-    private static final String VERSION = "2"; // TODO: Add version check like Silent Gear's
+    @SubscribeEvent
+    public static void register(RegisterPayloadHandlersEvent event) {
+        final var registrar = event.registrar("1.10");
 
-    public static SimpleChannel channel;
-    static {
-        channel = NetworkRegistry.ChannelBuilder.named(NAME)
-                .clientAcceptedVersions(s -> Objects.equals(s, VERSION))
-                .serverAcceptedVersions(s -> Objects.equals(s, VERSION))
-                .networkProtocolVersion(() -> VERSION)
-                .simpleChannel();
-
-        channel.messageBuilder(SyncBagTypesPacket.class, 1)
-                .decoder(SyncBagTypesPacket::fromBytes)
-                .encoder(SyncBagTypesPacket::toBytes)
-                .consumerMainThread(BagTypeManager::handleSyncPacket)
-                .add();
+        registrar.playToClient(
+                SyncBagTypesPayload.TYPE,
+                SyncBagTypesPayload.STREAM_CODEC,
+                (data, ctx) -> ctx.enqueueWork(() -> TbRegistries.BAG_TYPE.handleSyncPacket(data, ctx))
+                        .exceptionally(e -> {
+                            ctx.disconnect(Component.literal("Treasure Bags network failure: " + e.getMessage()));
+                            return null;
+                        })
+        );
     }
-
-    private Network() {}
-
-    public static void init() {}
 }

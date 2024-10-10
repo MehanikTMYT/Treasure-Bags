@@ -3,6 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-1.10.0] - 2024-10-10
+- Updated to NeoForge 1.21.1 (1.21 compatible)
+
 ## [1.20.1-1.9.0] - 2023-06-23
 - Updated to Minecraft 1.20.1
 

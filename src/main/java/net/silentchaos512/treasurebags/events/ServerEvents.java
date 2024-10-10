@@ -2,38 +2,31 @@ package net.silentchaos512.treasurebags.events;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkDirection;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.treasurebags.TreasureBags;
-import net.silentchaos512.treasurebags.lib.BagTypeManager;
-import net.silentchaos512.treasurebags.lib.IBagType;
-import net.silentchaos512.treasurebags.network.Network;
-import net.silentchaos512.treasurebags.network.SyncBagTypesPacket;
+import net.silentchaos512.treasurebags.network.payload.SyncBagTypesPayload;
+import net.silentchaos512.treasurebags.setup.TbRegistries;
 
-import java.util.Collection;
-
-@Mod.EventBusSubscriber(modid = TreasureBags.MOD_ID)
+@EventBusSubscriber(modid = TreasureBags.MOD_ID)
 public final class ServerEvents {
     private ServerEvents() {}
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
-        if (!(player instanceof ServerPlayer)) return;
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        ServerPlayer playerMP = (ServerPlayer) player;
-
-        sendBagTypesToClient(playerMP);
-        BagTypeManager.getErrorMessages(playerMP).forEach(player::sendSystemMessage);
+        sendBagTypesToClient(serverPlayer);
+        TbRegistries.BAG_TYPE.getErrorMessages(serverPlayer).forEach(player::sendSystemMessage);
     }
 
     private static void sendBagTypesToClient(ServerPlayer playerMP) {
-        Collection<IBagType> bagTypes = BagTypeManager.getValues();
-        TreasureBags.LOGGER.info("Sending {} bag types to {}", bagTypes.size(), playerMP.getScoreboardName());
-        SyncBagTypesPacket msg = new SyncBagTypesPacket(bagTypes);
-        Network.channel.sendTo(msg, playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        var payload = new SyncBagTypesPayload();
+        TreasureBags.LOGGER.info("Sending {} bag types to {}", payload.bagTypes().size(), playerMP.getScoreboardName());
+        PacketDistributor.sendToPlayer(playerMP, payload);
     }
 }

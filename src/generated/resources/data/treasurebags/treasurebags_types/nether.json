@@ -1,0 +1,18 @@
+{
+  "bag_color": "#FF8B0000",
+  "bag_overlay_color": "#FF9400D3",
+  "bag_string_color": "#FFFFD700",
+  "display_name": {
+    "translate": "bag.treasurebags.nether"
+  },
+  "drops_from_groups": [
+    "player",
+    "boss",
+    "hostile",
+    "peaceful"
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/nether",
+  "rarity": "rare",
+  "visible": true
+}

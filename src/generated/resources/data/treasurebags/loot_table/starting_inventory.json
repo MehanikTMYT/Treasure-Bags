@@ -8,7 +8,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "type": "treasurebags:spawn",
+              "bag_type": "treasurebags:spawn",
               "function": "treasurebags:set_bag_type"
             }
           ],

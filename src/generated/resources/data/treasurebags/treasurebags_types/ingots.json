@@ -1,15 +1,16 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FFFAEBD7",
+  "bag_overlay_color": "#FF808000",
+  "bag_string_color": "#FF404040",
+  "display_name": {
     "translate": "bag.treasurebags.ingots"
   },
-  "lootTable": "treasurebags:bags/ingots",
-  "rarity": "uncommon",
-  "bagColor": "#FAEBD7",
-  "bagOverlayColor": "#808000",
-  "bagStringColor": "#404040",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "boss",
     "hostile"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/ingots",
+  "rarity": "uncommon",
+  "visible": true
 }

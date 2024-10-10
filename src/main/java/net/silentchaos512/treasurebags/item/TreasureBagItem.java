@@ -2,8 +2,9 @@ package net.silentchaos512.treasurebags.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -14,17 +15,17 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.lib.item.LootContainerItem;
+import net.silentchaos512.treasurebags.Config;
 import net.silentchaos512.treasurebags.TreasureBags;
-import net.silentchaos512.treasurebags.config.Config;
-import net.silentchaos512.treasurebags.lib.BagTypeManager;
-import net.silentchaos512.treasurebags.lib.IBagType;
+import net.silentchaos512.treasurebags.lib.BagType;
+import net.silentchaos512.treasurebags.setup.TbDataComponents;
+import net.silentchaos512.treasurebags.setup.TbRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,17 +35,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TreasureBagItem extends LootContainerItem {
-    private static final String NBT_BAG_TYPE = "BagType";
-
     public TreasureBagItem(Properties properties) {
         super(TreasureBags.getId("default_bag"), true, properties);
     }
 
-    public ItemStack stackOfType(IBagType type) {
+    public ItemStack stackOfType(BagType type) {
         return stackOfType(type, 1);
     }
 
-    public ItemStack stackOfType(IBagType type, int count) {
+    public ItemStack stackOfType(BagType type, int count) {
         ItemStack result = new ItemStack(this, count);
         return setBagProperties(result, type);
     }
@@ -62,13 +61,9 @@ public class TreasureBagItem extends LootContainerItem {
     }
 
     @Nullable
-    public static IBagType getBagType(ItemStack stack) {
-        String typeStr = getBagTypeString(stack);
-        return BagTypeManager.getValue(new ResourceLocation(typeStr));
-    }
-
-    private static String getBagTypeString(ItemStack stack) {
-        return getData(stack).getString(NBT_BAG_TYPE);
+    public static BagType getBagType(ItemStack stack) {
+        ResourceLocation id = stack.get(TbDataComponents.BAG_TYPE);
+        return id != null ? TbRegistries.BAG_TYPE.get(id) : null;
     }
 
     /**
@@ -80,102 +75,80 @@ public class TreasureBagItem extends LootContainerItem {
      * @return The bag (modified original, not a copy)
      */
     public static ItemStack setBagType(ItemStack stack, ResourceLocation bagTypeId) {
-        if (!(stack.getItem() instanceof TreasureBagItem)) return stack;
-        CompoundTag tag = getData(stack);
-        tag.putString(NBT_BAG_TYPE, bagTypeId.toString());
+        stack.set(TbDataComponents.BAG_TYPE, bagTypeId);
         return stack;
     }
 
-    public static ItemStack setBagProperties(ItemStack stack, IBagType type) {
-        if (!(stack.getItem() instanceof TreasureBagItem)) return stack;
-        CompoundTag tag = getData(stack);
-        tag.putString(NBT_BAG_TYPE, type.getId().toString());
-        setLootTable(stack, type.getLootTable());
+    public static ItemStack setBagProperties(ItemStack stack, BagType type) {
+        setBagType(stack, TbRegistries.BAG_TYPE.getKey(type));
+        setLootTable(stack, type.lootTable());
+        stack.set(DataComponents.RARITY, type.rarity());
         return stack;
     }
 
     @Nonnull
     @Override
-    protected ResourceLocation getLootTable(ItemStack stack) {
-        IBagType type = getBagType(stack);
+    protected ResourceKey<LootTable> getLootTable(ItemStack stack) {
+        BagType type = getBagType(stack);
         if (type == null) {
             return super.getLootTable(stack);
         }
-        return type.getLootTable();
+        return type.lootTable();
     }
 
     @Nonnull
     @Override
     public Component getName(@Nonnull ItemStack stack) {
-        IBagType type = getBagType(stack);
+        BagType type = getBagType(stack);
         if (type != null) {
-            return type.getCustomName();
+            return type.customName();
         }
         return super.getName(stack);
     }
 
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        IBagType type = getBagType(stack);
-        if (type != null) {
-            return type.getRarity();
-        }
-        return super.getRarity(stack);
-    }
-
     @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack, int tintIndex) {
-        IBagType bagType = getBagType(stack);
+        BagType bagType = getBagType(stack);
         if (bagType != null) {
-            if (tintIndex == 0) return bagType.getBagColor();
-            if (tintIndex == 1) return bagType.getBagOverlayColor();
-            if (tintIndex == 2) return bagType.getBagStringColor();
+            if (tintIndex == 0) return bagType.bagColor();
+            if (tintIndex == 1) return bagType.bagOverlayColor();
+            if (tintIndex == 2) return bagType.bagStringColor();
         }
         return 0xFFFFFF;
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, TooltipFlag flagIn) {
-        // Bag type
-        if (flagIn.isAdvanced()) {
-            IBagType type = getBagType(stack);
-            if (type != null) {
-                tooltip.add(Component.translatable(this.getDescriptionId() + ".type", type.getId())
-                        .withStyle(ChatFormatting.YELLOW));
-            } else {
-                String typeStr = getBagTypeString(stack);
-                tooltip.add(Component.translatable(this.getDescriptionId() + ".unknownType")
-                        .withStyle(ChatFormatting.RED));
-                tooltip.add(Component.translatable(this.getDescriptionId() + ".type", typeStr)
-                        .withStyle(ChatFormatting.YELLOW));
-            }
-        }
+    public void appendHoverText(@Nonnull ItemStack stack, TooltipContext tooltipContext, @Nonnull List<Component> tooltip, TooltipFlag flag) {
+        var type = getBagType(stack);
+        var typeId = type != null ? TbRegistries.BAG_TYPE.getKey(type) : null;
+        var typeName = typeId != null ? typeId.toString() : "null";
 
-        // Loot table (or whatever ItemLootContainer wants to do)
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-
-        // Display data pack ID
-        String typeStr = getBagTypeString(stack);
-        ResourceLocation typeName = ResourceLocation.tryParse(typeStr);
-        if (typeName != null) {
-            tooltip.add(Component.literal(typeName.getNamespace())
-                    .withStyle(ChatFormatting.BLUE)
-                    .withStyle(ChatFormatting.ITALIC));
+        appendInfoPair(tooltip, flag, true, "type", typeName);
+        if (type != null) {
+            appendInfoPair(tooltip, flag, true, "group", type.group());
+            appendInfoPair(tooltip, flag, true, "lootTable", type.lootTable().location().toString());
         } else {
             tooltip.add(Component.translatable(this.getDescriptionId() + ".invalidType")
                     .withStyle(ChatFormatting.RED));
+        }
+        appendInfoPair(tooltip, flag, false, "packName", typeId != null ? typeId.getNamespace() : "null");
+    }
+
+    private void appendInfoPair(List<Component> tooltip, TooltipFlag flag, boolean advancedOnly, String key, String value) {
+        if (flag.isAdvanced() || !advancedOnly) {
+            var valueText = Component.literal(value).withStyle(ChatFormatting.WHITE);
+            tooltip.add(Component.translatable(this.getDescriptionId() + "." + key, valueText).withStyle(ChatFormatting.AQUA));
         }
     }
 
     public List<ItemStack> getSubItems() {
         NonNullList<ItemStack> items = NonNullList.create();
-        items.add(new ItemStack(this));
 
         // Add for each type (sorted by ID)
-        List<IBagType> list = new ArrayList<>(BagTypeManager.getValues());
-        list.sort(Comparator.comparing(o -> o.getId().toString()));
-        for (IBagType type : list) {
-            if (type.isVisible()) {
+        List<BagType> list = new ArrayList<>(TbRegistries.BAG_TYPE.stream().toList());
+        list.sort(Comparator.comparing(bagType -> TbRegistries.BAG_TYPE.getKey(bagType).toString()));
+        for (BagType type : list) {
+            if (type.visible()) {
                 items.add(stackOfType(type));
             }
         }
@@ -216,7 +189,7 @@ public class TreasureBagItem extends LootContainerItem {
         if (Config.Common.alwaysSpawnItems.get() || !playerIn.getInventory().add(copy)) {
             ItemEntity entityItem = new ItemEntity(playerIn.level(), playerIn.getX(), playerIn.getY(0.5), playerIn.getZ(), copy);
             entityItem.setNoPickUpDelay();
-            entityItem.setThrower(playerIn.getUUID());
+            entityItem.setThrower(playerIn);
             playerIn.level().addFreshEntity(entityItem);
         }
     }
@@ -232,7 +205,7 @@ public class TreasureBagItem extends LootContainerItem {
 
     private static void mergeItem(Collection<ItemStack> list, ItemStack stack) {
         for (ItemStack itemStack : list) {
-            if (ItemHandlerHelper.canItemStacksStack(itemStack, stack)) {
+            if (ItemStack.isSameItemSameComponents(itemStack, stack)) {
                 int space = itemStack.getMaxStackSize() - itemStack.getCount();
                 int toMerge = Math.min(space, stack.getCount());
                 itemStack.grow(toMerge);

@@ -13,7 +13,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "type": "treasurebags:player",
+              "bag_type": "treasurebags:player",
               "function": "treasurebags:set_bag_type"
             }
           ],

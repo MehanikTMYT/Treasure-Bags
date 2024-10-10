@@ -1,0 +1,18 @@
+{
+  "bag_color": "#FFCD5C5C",
+  "bag_overlay_color": "#FFFFA500",
+  "bag_string_color": "#FFFAFAD2",
+  "display_name": {
+    "translate": "bag.treasurebags.gag"
+  },
+  "drops_from_groups": [
+    "player",
+    "boss",
+    "hostile",
+    "peaceful"
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/gag",
+  "rarity": "uncommon",
+  "visible": true
+}

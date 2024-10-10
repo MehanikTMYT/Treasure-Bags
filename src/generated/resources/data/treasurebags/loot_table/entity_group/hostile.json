@@ -3,6 +3,11 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:empty",
@@ -12,7 +17,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "treasurebags:select_bag_rarity",
+              "function": "treasurebags:select_bag_by_rarity",
               "rarity": "common"
             }
           ],
@@ -23,7 +28,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "treasurebags:select_bag_rarity",
+              "function": "treasurebags:select_bag_by_rarity",
               "rarity": "uncommon"
             }
           ],
@@ -34,7 +39,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "treasurebags:select_bag_rarity",
+              "function": "treasurebags:select_bag_by_rarity",
               "rarity": "rare"
             }
           ],
@@ -45,7 +50,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "treasurebags:select_bag_rarity",
+              "function": "treasurebags:select_bag_by_rarity",
               "rarity": "epic"
             }
           ],

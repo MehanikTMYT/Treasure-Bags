@@ -1,24 +1,23 @@
-package net.silentchaos512.treasurebags.config;
+package net.silentchaos512.treasurebags;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.silentchaos512.treasurebags.TreasureBags;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = TreasureBags.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = TreasureBags.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class Config {
     public static final class Common {
-        static final ForgeConfigSpec spec;
+        static final ModConfigSpec spec;
 
-        public static final ForgeConfigSpec.BooleanValue alwaysSpawnItems;
-        public static final ForgeConfigSpec.ConfigValue<List<? extends String>> disabledBagGroups;
+        public static final ModConfigSpec.BooleanValue alwaysSpawnItems;
+        public static final ModConfigSpec.ConfigValue<List<? extends String>> disabledBagGroups;
 
         static {
-            ForgeConfigSpec.Builder builder =new ForgeConfigSpec.Builder();
+            ModConfigSpec.Builder builder =new ModConfigSpec.Builder();
 
             {
                 builder.push("item");
@@ -62,7 +61,7 @@ public final class Config {
 
     private Config() {}
 
-    public static void init() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Common.spec);
+    @SubscribeEvent
+    public static void onLoad(final ModConfigEvent event) {
     }
 }

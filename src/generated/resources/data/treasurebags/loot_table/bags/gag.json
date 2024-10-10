@@ -1,0 +1,112 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": "Franz"
+            }
+          ],
+          "name": "minecraft:hopper"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": "Loginar Egg?"
+            }
+          ],
+          "name": "minecraft:light_blue_glazed_terracotta"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": "Larry's Wool"
+            }
+          ],
+          "name": "minecraft:pink_wool"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": 2.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": "Drumsticks"
+            }
+          ],
+          "name": "minecraft:stick"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                "You're too good to need this, right?"
+              ],
+              "mode": "append"
+            }
+          ],
+          "name": "minecraft:recovery_compass"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                "Choo Choo!"
+              ],
+              "mode": "append"
+            }
+          ],
+          "name": "minecraft:furnace_minecart"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                "Don't blink"
+              ],
+              "mode": "append"
+            },
+            {
+              "components": {
+                "minecraft:max_damage": 1
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "add": false,
+              "enchantments": {
+                "minecraft:efficiency": 5.0,
+                "minecraft:mending": 1.0,
+                "minecraft:silk_touch": 1.0,
+                "minecraft:unbreaking": 3.0
+              },
+              "function": "minecraft:set_enchantments"
+            }
+          ],
+          "name": "minecraft:golden_pickaxe"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "treasurebags:bags/gag"
+}

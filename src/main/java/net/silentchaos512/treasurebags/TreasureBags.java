@@ -1,12 +1,14 @@
 package net.silentchaos512.treasurebags;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLLoader;
 import net.silentchaos512.treasurebags.setup.TbItems;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +26,16 @@ public final class TreasureBags {
     public static final Random RANDOM = new Random();
 
     public static TreasureBags INSTANCE;
-    public static SideProxy PROXY;
+    private static SideProxy PROXY;
 
-    public TreasureBags() {
+    public TreasureBags(IEventBus modEventBus, ModContainer modContainer) {
         INSTANCE = this;
-        PROXY = DistExecutor.safeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(TbItems::onBuildContentsOfCreativeTabs);
+        PROXY = FMLEnvironment.dist == Dist.CLIENT
+                ? new SideProxy.Client(modEventBus)
+                : new SideProxy.Server(modEventBus);
+
+        modEventBus.addListener(TbItems::onBuildContentsOfCreativeTabs);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.Common.spec);
     }
 
     public static String getVersion() {
@@ -45,7 +51,7 @@ public final class TreasureBags {
     }
 
     public static ResourceLocation getId(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @Nullable

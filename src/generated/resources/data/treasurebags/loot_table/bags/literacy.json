@@ -55,18 +55,6 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:writable_book"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_name",
-              "name": {
-                "text": "Franz"
-              }
-            }
-          ],
-          "name": "minecraft:hopper"
         }
       ],
       "rolls": {
@@ -89,9 +77,7 @@
           "functions": [
             {
               "function": "minecraft:set_name",
-              "name": {
-                "text": "That Time I Was Slapped With a Salmon, Vol. 4"
-              }
+              "name": "That Time I Was Slapped With a Salmon, Vol. 4"
             }
           ],
           "name": "minecraft:book"
@@ -101,9 +87,7 @@
           "functions": [
             {
               "function": "minecraft:set_name",
-              "name": {
-                "text": "The Adventures of Tardigrade Man"
-              }
+              "name": "The Adventures of Tardigrade Man"
             }
           ],
           "name": "minecraft:book"
@@ -113,9 +97,7 @@
           "functions": [
             {
               "function": "minecraft:set_name",
-              "name": {
-                "text": "Reading For Dummies"
-              }
+              "name": "Reading For Dummies"
             }
           ],
           "name": "minecraft:book"
@@ -125,9 +107,7 @@
           "functions": [
             {
               "function": "minecraft:set_name",
-              "name": {
-                "text": "The Story of Larry the Sheep"
-              }
+              "name": "The Story of Larry the Sheep"
             }
           ],
           "name": "minecraft:book"

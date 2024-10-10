@@ -1,12 +1,13 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FF32CD32",
+  "bag_overlay_color": "#FF87CEEB",
+  "bag_string_color": "#FFFFD700",
+  "display_name": {
     "translate": "bag.treasurebags.spawn"
   },
-  "lootTable": "treasurebags:bags/spawn",
+  "drops_from_groups": [],
+  "group": "default",
+  "loot_table": "treasurebags:bags/spawn",
   "rarity": "common",
-  "bagColor": "#32CD32",
-  "bagOverlayColor": "#87CEEB",
-  "bagStringColor": "#FFD700",
-  "dropsFromGroups": []
+  "visible": true
 }

@@ -1,17 +1,18 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FF228B22",
+  "bag_overlay_color": "#FFA0522D",
+  "bag_string_color": "#FF808000",
+  "display_name": {
     "translate": "bag.treasurebags.nature"
   },
-  "lootTable": "treasurebags:bags/nature",
-  "rarity": "common",
-  "bagColor": "#228B22",
-  "bagOverlayColor": "#A0522D",
-  "bagStringColor": "#808000",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "player",
     "boss",
     "hostile",
     "peaceful"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/nature",
+  "rarity": "common",
+  "visible": true
 }

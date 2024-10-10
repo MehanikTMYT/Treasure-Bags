@@ -18,12 +18,12 @@
             }
           ],
           "name": "minecraft:stick",
-          "weight": 15
+          "weight": 24
         },
         {
           "type": "minecraft:tag",
           "expand": true,
-          "name": "forge:rods"
+          "name": "c:rods"
         }
       ],
       "rolls": 1.0
@@ -49,7 +49,7 @@
             }
           ],
           "name": "minecraft:cobblestone",
-          "weight": 72
+          "weight": 36
         },
         {
           "type": "minecraft:item",
@@ -65,7 +65,7 @@
             }
           ],
           "name": "minecraft:stone",
-          "weight": 48
+          "weight": 24
         },
         {
           "type": "minecraft:item",
@@ -81,7 +81,7 @@
             }
           ],
           "name": "minecraft:andesite",
-          "weight": 30
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -97,7 +97,7 @@
             }
           ],
           "name": "minecraft:diorite",
-          "weight": 30
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -113,7 +113,7 @@
             }
           ],
           "name": "minecraft:granite",
-          "weight": 30
+          "weight": 15
         },
         {
           "type": "minecraft:item",

@@ -33,7 +33,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:grass",
+          "name": "minecraft:short_grass",
           "weight": 12
         },
         {
@@ -200,7 +200,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "forge:seeds",
+          "name": "c:seeds",
           "weight": 10
         },
         {
@@ -217,7 +217,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "forge:crops",
+          "name": "c:crops",
           "weight": 5
         }
       ],
@@ -238,8 +238,8 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
+                "max": 4.0,
+                "min": 2.0
               },
               "function": "minecraft:set_count"
             }
@@ -247,7 +247,11 @@
           "name": "minecraft:saplings"
         }
       ],
-      "rolls": 1.0
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      }
     },
     {
       "bonus_rolls": 0.0,
@@ -260,8 +264,8 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
+                "max": 4.0,
+                "min": 2.0
               },
               "function": "minecraft:set_count"
             }
@@ -269,7 +273,11 @@
           "name": "minecraft:flowers"
         }
       ],
-      "rolls": 1.0
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      }
     }
   ],
   "random_sequence": "treasurebags:bags/nature"

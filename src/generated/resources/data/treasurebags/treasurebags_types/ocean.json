@@ -1,0 +1,18 @@
+{
+  "bag_color": "#FF0000CD",
+  "bag_overlay_color": "#FF20B2AA",
+  "bag_string_color": "#FFFFA500",
+  "display_name": {
+    "translate": "bag.treasurebags.ocean"
+  },
+  "drops_from_groups": [
+    "player",
+    "boss",
+    "hostile",
+    "peaceful"
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/ocean",
+  "rarity": "rare",
+  "visible": true
+}

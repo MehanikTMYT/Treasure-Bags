@@ -1,25 +1,28 @@
 package net.silentchaos512.treasurebags.data;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.treasurebags.TreasureBags;
 import net.silentchaos512.treasurebags.api.IEntityGroup;
+import net.silentchaos512.treasurebags.lib.BagType;
 import net.silentchaos512.treasurebags.lib.StandardEntityGroups;
-import net.silentchaos512.utils.Color;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.Locale;
+import java.util.List;
 
 public class BagTypeBuilder {
     final ResourceLocation bagTypeId;
     private final String group;
     private final Rarity rarity;
-    private final ResourceLocation lootTable;
+    private final ResourceKey<LootTable> lootTable;
     private final Collection<IEntityGroup> dropsFromGroups = new LinkedHashSet<>();
     private boolean noMobDrops = false;
     private Component displayName;
@@ -27,12 +30,7 @@ public class BagTypeBuilder {
     private int bagOverlayColor;
     private int bagStringColor;
 
-    @Deprecated
-    public BagTypeBuilder(ResourceLocation bagTypeId, Rarity rarity, ResourceLocation lootTable) {
-        this(bagTypeId, "default", rarity, lootTable);
-    }
-
-    public BagTypeBuilder(ResourceLocation bagTypeId, String group, Rarity rarity, ResourceLocation lootTable) {
+    public BagTypeBuilder(ResourceLocation bagTypeId, String group, Rarity rarity, ResourceKey<LootTable> lootTable) {
         this.bagTypeId = bagTypeId;
         this.group = group;
         this.rarity = rarity;
@@ -81,23 +79,31 @@ public class BagTypeBuilder {
         return colors(bag.getColor(), overlay.getColor(), string.getColor());
     }
 
-    public JsonObject serialize() {
-        JsonObject json = new JsonObject();
-        json.addProperty("group", this.group);
-        json.add("displayName", Component.Serializer.toJsonTree(this.displayName));
-        json.addProperty("lootTable", this.lootTable.toString());
-        json.addProperty("rarity", this.rarity.name().toLowerCase(Locale.ROOT));
-        json.addProperty("bagColor", Color.format(this.bagColor & 0xFFFFFF));
-        json.addProperty("bagOverlayColor", Color.format(this.bagOverlayColor & 0xFFFFFF));
-        json.addProperty("bagStringColor", Color.format(this.bagStringColor & 0xFFFFFF));
-
-        JsonArray dropsFromArray = new JsonArray();
-        if (!dropsFromGroups.isEmpty()) {
-            dropsFromGroups.forEach(group -> dropsFromArray.add(TreasureBags.shortenId(group.getId())));
-        } else if (!noMobDrops) {
+    public void validate() {
+        if (dropsFromGroups.isEmpty() && !noMobDrops) {
             BagTypesProvider.LOGGER.warn("Bag type '{}' has no dropsFromGroups. This may be unintentional.", this.bagTypeId);
         }
-        json.add("dropsFromGroups", dropsFromArray);
-        return json;
+    }
+
+    public JsonObject serialize() {
+        validate();
+
+        BagType bagType = new BagType(
+                this.group,
+                this.rarity,
+                List.copyOf(this.dropsFromGroups),
+                this.bagColor,
+                this.bagOverlayColor,
+                this.bagStringColor,
+                this.displayName,
+                this.lootTable,
+                true
+        );
+
+        var jsonElementDataResult = BagType.CODEC.encodeStart(JsonOps.INSTANCE, bagType);
+        if (jsonElementDataResult.isError()) {
+            TreasureBags.LOGGER.error("Something went wrong serializing bag type \"{}\"", this.bagTypeId);
+        }
+        return jsonElementDataResult.getOrThrow().getAsJsonObject();
     }
 }

@@ -1,14 +1,15 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FFFF00FF",
+  "bag_overlay_color": "#FF6495ED",
+  "bag_string_color": "#FFFFD700",
+  "display_name": {
     "translate": "bag.treasurebags.player"
   },
-  "lootTable": "treasurebags:bags/player",
-  "rarity": "epic",
-  "bagColor": "#FF00FF",
-  "bagOverlayColor": "#6495ED",
-  "bagStringColor": "#FFD700",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "player"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/player",
+  "rarity": "epic",
+  "visible": true
 }

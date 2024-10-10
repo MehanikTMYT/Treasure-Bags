@@ -2,20 +2,20 @@ package net.silentchaos512.treasurebags.setup;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.lib.registry.ItemRegistryObject;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.treasurebags.TreasureBags;
 import net.silentchaos512.treasurebags.item.TreasureBagItem;
 
 import java.util.function.Supplier;
 
 public final class TbItems {
-    public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TreasureBags.MOD_ID);
+    public static DeferredRegister.Items ITEMS = DeferredRegister.createItems(TreasureBags.MOD_ID);
 
-    public static final ItemRegistryObject<TreasureBagItem> TREASURE_BAG = register("treasure_bag", () ->
-            new TreasureBagItem(new Item.Properties())
+    public static final DeferredItem<TreasureBagItem> TREASURE_BAG = register(
+            "treasure_bag",
+            () -> new TreasureBagItem(new Item.Properties())
     );
 
     private TbItems() {}
@@ -26,7 +26,7 @@ public final class TbItems {
         }
     }
 
-    private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {
-        return new ItemRegistryObject<>(ITEMS.register(name, item));
+    private static <T extends Item> DeferredItem<T> register(String name, Supplier<T> item) {
+        return ITEMS.register(name, item);
     }
 }

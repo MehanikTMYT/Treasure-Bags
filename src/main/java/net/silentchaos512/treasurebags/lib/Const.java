@@ -1,44 +1,54 @@
 package net.silentchaos512.treasurebags.lib;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.silentchaos512.treasurebags.TreasureBags;
 
 public class Const {
     public static final class Bags {
-        public static final ResourceLocation DEFAULT = get("default");
-        public static final ResourceLocation DUNGEON = get("dungeon");
-        public static final ResourceLocation ENDER = get("ender");
-        public static final ResourceLocation FOOD = get("food");
-        public static final ResourceLocation INGOTS = get("ingots");
-        public static final ResourceLocation LITERACY = get("literacy");
-        public static final ResourceLocation NATURE = get("nature");
-        public static final ResourceLocation PLAYER = get("player");
-        public static final ResourceLocation SPAWN = get("spawn");
-        public static final ResourceLocation STICKS_AND_STONES = get("sticks_and_stones");
-        public static final ResourceLocation TEST = get("test");
+        // TODO: brewing bag? template/trim bag? egg bag?
+        public static final ResourceLocation DEFAULT = TreasureBags.getId("default");
+        public static final ResourceLocation DUNGEON = TreasureBags.getId("dungeon");
+        public static final ResourceLocation ENDER = TreasureBags.getId("ender");
+        public static final ResourceLocation FOOD = TreasureBags.getId("food");
+        public static final ResourceLocation GAG = TreasureBags.getId("gag");
+        public static final ResourceLocation INGOTS = TreasureBags.getId("ingots");
+        public static final ResourceLocation LITERACY = TreasureBags.getId("literacy");
+        public static final ResourceLocation NATURE = TreasureBags.getId("nature");
+        public static final ResourceLocation NETHER = TreasureBags.getId("nether");
+        public static final ResourceLocation OCEAN = TreasureBags.getId("ocean");
+        public static final ResourceLocation PLAYER = TreasureBags.getId("player");
+        public static final ResourceLocation SPAWN = TreasureBags.getId("spawn");
+        public static final ResourceLocation STICKS_AND_STONES = TreasureBags.getId("sticks_and_stones");
+        public static final ResourceLocation TEST = TreasureBags.getId("test");
 
         private Bags() {}
     }
 
     public static final class LootTables {
-        public static final ResourceLocation STARTING_INVENTORY = get("starting_inventory");
+        public static final ResourceKey<LootTable> STARTING_INVENTORY = getLootTable("starting_inventory");
 
-        public static final ResourceLocation BAGS_DEFAULT = get("bags/default");
-        public static final ResourceLocation BAGS_DUNGEON = get("bags/dungeon");
-        public static final ResourceLocation BAGS_ENDER = get("bags/ender");
-        public static final ResourceLocation BAGS_FOOD = get("bags/food");
-        public static final ResourceLocation BAGS_INGOTS = get("bags/ingots");
-        public static final ResourceLocation BAGS_LITERACY = get("bags/literacy");
-        public static final ResourceLocation BAGS_NATURE = get("bags/nature");
-        public static final ResourceLocation BAGS_PLAYER = get("bags/player");
-        public static final ResourceLocation BAGS_SPAWN = get("bags/spawn");
-        public static final ResourceLocation BAGS_STICKS_AND_STONES = get("bags/sticks_and_stones");
-        public static final ResourceLocation BAGS_TEST = get("bags/test");
+        public static final ResourceKey<LootTable> BAGS_DEFAULT = getLootTable("bags/default");
+        public static final ResourceKey<LootTable> BAGS_DUNGEON = getLootTable("bags/dungeon");
+        public static final ResourceKey<LootTable> BAGS_ENDER = getLootTable("bags/ender");
+        public static final ResourceKey<LootTable> BAGS_FOOD = getLootTable("bags/food");
+        public static final ResourceKey<LootTable> BAGS_GAG = getLootTable("bags/gag");
+        public static final ResourceKey<LootTable> BAGS_INGOTS = getLootTable("bags/ingots");
+        public static final ResourceKey<LootTable> BAGS_LITERACY = getLootTable("bags/literacy");
+        public static final ResourceKey<LootTable> BAGS_NATURE = getLootTable("bags/nature");
+        public static final ResourceKey<LootTable> BAGS_NETHER = getLootTable("bags/nether");
+        public static final ResourceKey<LootTable> BAGS_OCEAN = getLootTable("bags/ocean");
+        public static final ResourceKey<LootTable> BAGS_PLAYER = getLootTable("bags/player");
+        public static final ResourceKey<LootTable> BAGS_SPAWN = getLootTable("bags/spawn");
+        public static final ResourceKey<LootTable> BAGS_STICKS_AND_STONES = getLootTable("bags/sticks_and_stones");
+        public static final ResourceKey<LootTable> BAGS_TEST = getLootTable("bags/test");
 
         private LootTables() {}
     }
 
-    private static ResourceLocation get(String path) {
-        return TreasureBags.getId(path);
+    private static ResourceKey<LootTable> getLootTable(String path) {
+        return ResourceKey.create(Registries.LOOT_TABLE, TreasureBags.getId(path));
     }
 }

@@ -16,15 +16,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.lib.util.PlayerUtils;
-import net.silentchaos512.treasurebags.lib.BagTypeManager;
-import net.silentchaos512.treasurebags.lib.IBagType;
 import net.silentchaos512.treasurebags.setup.TbItems;
+import net.silentchaos512.treasurebags.setup.TbRegistries;
 
 import java.util.stream.Collectors;
 
 public final class TreasureBagsCommand {
     private static final SuggestionProvider<CommandSourceStack> bagTypeSuggestions = (ctx, builder) ->
-            SharedSuggestionProvider.suggestResource(BagTypeManager.getValues().stream().map(IBagType::getId), builder);
+            SharedSuggestionProvider.suggestResource(TbRegistries.BAG_TYPE.keySet(), builder);
 
     private TreasureBagsCommand() {}
 
@@ -58,8 +57,8 @@ public final class TreasureBagsCommand {
     }
 
     private static int giveBags(CommandContext<CommandSourceStack> context, int bagCount) throws CommandSyntaxException {
-        ResourceLocation bagTypeId = ResourceLocationArgument.getId(context, "bagType");
-        IBagType bagType = BagTypeManager.getValue(bagTypeId);
+        var bagTypeId = ResourceLocationArgument.getId(context, "bagType");
+        var bagType = TbRegistries.BAG_TYPE.get(bagTypeId);
         if (bagType == null) {
             context.getSource().sendFailure(translate("give.invalid", bagTypeId.toString()));
             return 0;
@@ -68,15 +67,15 @@ public final class TreasureBagsCommand {
         for (ServerPlayer player : EntityArgument.getPlayers(context, "players")) {
             ItemStack stack = TbItems.TREASURE_BAG.get().stackOfType(bagType, bagCount);
             PlayerUtils.giveItem(player, stack);
-            context.getSource().sendSuccess(() -> translate("give.success", bagCount, bagType.getCustomName(), player.getScoreboardName()), true);
+            context.getSource().sendSuccess(() -> translate("give.success", bagCount, bagType.customName(), player.getScoreboardName()), true);
         }
 
         return 1;
     }
 
     private static int listBagTypes(CommandContext<CommandSourceStack> context) {
-        String str = BagTypeManager.getValues().stream()
-                .map(type -> type.getId().toString())
+        String str = TbRegistries.BAG_TYPE.keySet().stream()
+                .map(ResourceLocation::toString)
                 .collect(Collectors.joining(", "));
         context.getSource().sendSuccess(() -> Component.literal(str), true);
         return 1;

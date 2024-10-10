@@ -1,17 +1,18 @@
 {
-  "group": "default",
-  "displayName": {
+  "bag_color": "#FFCD853F",
+  "bag_overlay_color": "#FFF5FFFA",
+  "bag_string_color": "#FF48D1CC",
+  "display_name": {
     "translate": "bag.treasurebags.literacy"
   },
-  "lootTable": "treasurebags:bags/literacy",
-  "rarity": "common",
-  "bagColor": "#CD853F",
-  "bagOverlayColor": "#F5FFFA",
-  "bagStringColor": "#48D1CC",
-  "dropsFromGroups": [
+  "drops_from_groups": [
     "player",
     "boss",
     "hostile",
     "peaceful"
-  ]
+  ],
+  "group": "default",
+  "loot_table": "treasurebags:bags/literacy",
+  "rarity": "common",
+  "visible": true
 }
