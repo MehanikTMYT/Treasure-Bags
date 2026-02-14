@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.silentchaos512.treasurebags.Config;
 import net.silentchaos512.treasurebags.TreasureBags;
 import net.silentchaos512.treasurebags.item.TreasureBagItem;
 import net.silentchaos512.treasurebags.lib.BagType;
@@ -44,12 +45,18 @@ public class SelectBagByRarity extends LootItemConditionalFunction {
         if (entity == null) return ItemStack.EMPTY;
 
         List<BagType> list = TbRegistries.BAG_TYPE.stream()
+                .filter(SelectBagByRarity::isBagGroupEnabled)
                 .filter(type -> type.canDropFromMob(entity) && type.rarity() == this.rarity)
                 .toList();
         if (list.isEmpty()) return ItemStack.EMPTY;
 
         BagType bagType = list.get(TreasureBags.RANDOM.nextInt(list.size()));
         return TreasureBagItem.setBagProperties(stack, bagType);
+    }
+
+    private static boolean isBagGroupEnabled(BagType type) {
+        // Check if the group is disabled
+        return !(Config.Common.spec.isLoaded() && Config.Common.disabledBagGroups.get().contains(type.group()));
     }
 
     @Override

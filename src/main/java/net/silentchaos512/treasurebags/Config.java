@@ -11,13 +11,14 @@ import java.util.List;
 @EventBusSubscriber(modid = TreasureBags.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class Config {
     public static final class Common {
-        static final ModConfigSpec spec;
+        public static final ModConfigSpec spec;
 
         public static final ModConfigSpec.BooleanValue alwaysSpawnItems;
         public static final ModConfigSpec.ConfigValue<List<? extends String>> disabledBagGroups;
+        public static final ModConfigSpec.BooleanValue mobsDropBagsWhenKilled;
 
         static {
-            ModConfigSpec.Builder builder =new ModConfigSpec.Builder();
+            ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
             {
                 builder.push("item");
@@ -35,6 +36,11 @@ public final class Config {
                             .comment("Disables all treasure bags in these groups. The built-in bags are in the \"default\" and \"example\" groups")
                             .define("disabledGroups", ImmutableList.of("example", "another_example"), Config::isStringList);
 
+                    mobsDropBagsWhenKilled = builder
+                            .comment("Mobs will drop treasure bags when killed by a player, assuming all bag groups are not disabled in \"disabledGroups\" and the loot tables have not been modified.",
+                                    "This is a quick disable option; to customize drops, see the loot tables in \"data/treasurebags/loot_table/entity_group/\"")
+                            .define("mobsDropBagsWhenKilled", true);
+
                     builder.pop();
                 }
 
@@ -44,7 +50,8 @@ public final class Config {
             spec = builder.build();
         }
 
-        private Common() {}
+        private Common() {
+        }
     }
 
     private static boolean isStringList(Object obj) {
@@ -59,7 +66,8 @@ public final class Config {
         return false;
     }
 
-    private Config() {}
+    private Config() {
+    }
 
     @SubscribeEvent
     public static void onLoad(final ModConfigEvent event) {

@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
+import net.silentchaos512.treasurebags.Config;
 import net.silentchaos512.treasurebags.TreasureBags;
 import net.silentchaos512.treasurebags.setup.EntityGroups;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,10 @@ public class BagDropLootModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        TreasureBags.LOGGER.debug("{}: {}", context.getQueriedLootTableId(), context.getParamOrNull(LootContextParams.THIS_ENTITY));
+        if (Config.Common.spec.isLoaded() && !Config.Common.mobsDropBagsWhenKilled.get()) {
+            // Bag drops are disabled in the config
+                return generatedLoot;
+        }
 
         Entity thisEntity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         if (thisEntity == null) {
