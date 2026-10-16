@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.silentchaos512.treasurebags.Config;
@@ -41,7 +41,7 @@ public class SelectBagByRarity extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
-        Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
+        Entity entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity == null) return ItemStack.EMPTY;
 
         List<BagType> list = TbRegistries.BAG_TYPE.stream()
@@ -60,7 +60,7 @@ public class SelectBagByRarity extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType<SelectBagByRarity> getType() {
+    public MapCodec<SelectBagByRarity> codec() {
         return TbLoot.SELECT_BAG_BY_RARITY.get();
     }
 }

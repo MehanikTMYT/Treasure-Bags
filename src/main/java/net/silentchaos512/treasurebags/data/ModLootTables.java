@@ -12,7 +12,7 @@ import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.data.loot.packs.VanillaLootTableProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.flag.FeatureFlags;
@@ -65,11 +65,11 @@ public class ModLootTables extends LootTableProvider {
     }
 
     @Override
-    protected void validate(WritableRegistry<LootTable> writableregistry, ValidationContext validationcontext, ProblemReporter.Collector problemreporter$collector) {
+    protected void validate(WritableRegistry<LootTable> writableregistry, net.minecraft.world.level.storage.loot.ValidationContextSource validationcontext, ProblemReporter.Collector problemreporter$collector) {
         // Don't validate against built-in tables
     }
 
-    private static LootPoolSingletonContainer.Builder<?> treasureBag(ResourceLocation bagType) {
+    private static LootPoolSingletonContainer.Builder<?> treasureBag(Identifier bagType) {
         return LootItem.lootTableItem(TbItems.TREASURE_BAG)
                 .apply(SetBagTypeFunction.builder(bagType));
     }

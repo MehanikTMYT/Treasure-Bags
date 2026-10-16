@@ -8,7 +8,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = TreasureBags.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = TreasureBags.MOD_ID)
 public final class Config {
     public static final class Common {
         public static final ModConfigSpec spec;

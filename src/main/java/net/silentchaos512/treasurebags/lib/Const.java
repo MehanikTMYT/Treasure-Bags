@@ -2,27 +2,27 @@ package net.silentchaos512.treasurebags.lib;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.silentchaos512.treasurebags.TreasureBags;
 
 public class Const {
     public static final class Bags {
         // TODO: brewing bag? template/trim bag? egg bag?
-        public static final ResourceLocation DEFAULT = TreasureBags.getId("default");
-        public static final ResourceLocation DUNGEON = TreasureBags.getId("dungeon");
-        public static final ResourceLocation ENDER = TreasureBags.getId("ender");
-        public static final ResourceLocation FOOD = TreasureBags.getId("food");
-        public static final ResourceLocation GAG = TreasureBags.getId("gag");
-        public static final ResourceLocation INGOTS = TreasureBags.getId("ingots");
-        public static final ResourceLocation LITERACY = TreasureBags.getId("literacy");
-        public static final ResourceLocation NATURE = TreasureBags.getId("nature");
-        public static final ResourceLocation NETHER = TreasureBags.getId("nether");
-        public static final ResourceLocation OCEAN = TreasureBags.getId("ocean");
-        public static final ResourceLocation PLAYER = TreasureBags.getId("player");
-        public static final ResourceLocation SPAWN = TreasureBags.getId("spawn");
-        public static final ResourceLocation STICKS_AND_STONES = TreasureBags.getId("sticks_and_stones");
-        public static final ResourceLocation TEST = TreasureBags.getId("test");
+        public static final Identifier DEFAULT = TreasureBags.getId("default");
+        public static final Identifier DUNGEON = TreasureBags.getId("dungeon");
+        public static final Identifier ENDER = TreasureBags.getId("ender");
+        public static final Identifier FOOD = TreasureBags.getId("food");
+        public static final Identifier GAG = TreasureBags.getId("gag");
+        public static final Identifier INGOTS = TreasureBags.getId("ingots");
+        public static final Identifier LITERACY = TreasureBags.getId("literacy");
+        public static final Identifier NATURE = TreasureBags.getId("nature");
+        public static final Identifier NETHER = TreasureBags.getId("nether");
+        public static final Identifier OCEAN = TreasureBags.getId("ocean");
+        public static final Identifier PLAYER = TreasureBags.getId("player");
+        public static final Identifier SPAWN = TreasureBags.getId("spawn");
+        public static final Identifier STICKS_AND_STONES = TreasureBags.getId("sticks_and_stones");
+        public static final Identifier TEST = TreasureBags.getId("test");
 
         private Bags() {}
     }

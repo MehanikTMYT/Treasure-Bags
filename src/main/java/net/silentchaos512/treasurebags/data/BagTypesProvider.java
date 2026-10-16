@@ -7,7 +7,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Rarity;
 import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.treasurebags.lib.Const;
@@ -116,7 +116,7 @@ public class BagTypesProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         Path outputFolder = this.generator.getPackOutput().getOutputFolder();
-        Set<ResourceLocation> entries = Sets.newHashSet();
+        Set<Identifier> entries = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
 
         //noinspection OverlyLongLambda

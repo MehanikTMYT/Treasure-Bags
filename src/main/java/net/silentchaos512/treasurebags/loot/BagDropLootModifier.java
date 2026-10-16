@@ -26,8 +26,8 @@ public class BagDropLootModifier extends LootModifier {
             )
     );
 
-    public BagDropLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
+    public BagDropLootModifier(LootItemCondition[] conditionsIn, int priority) {
+        super(conditionsIn, priority);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BagDropLootModifier extends LootModifier {
                 return generatedLoot;
         }
 
-        Entity thisEntity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
+        Entity thisEntity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (thisEntity == null) {
             return generatedLoot;
         }

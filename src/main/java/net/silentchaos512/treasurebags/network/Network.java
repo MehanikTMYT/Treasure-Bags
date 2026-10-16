@@ -8,7 +8,7 @@ import net.silentchaos512.treasurebags.TreasureBags;
 import net.silentchaos512.treasurebags.network.payload.SyncBagTypesPayload;
 import net.silentchaos512.treasurebags.setup.TbRegistries;
 
-@EventBusSubscriber(modid = TreasureBags.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = TreasureBags.MOD_ID)
 public final class Network {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {

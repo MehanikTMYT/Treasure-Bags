@@ -10,9 +10,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.lib.util.PlayerUtils;
@@ -29,12 +29,12 @@ public final class TreasureBagsCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("treasurebags")
-                .requires(source -> source.hasPermission(2));
+                .requires(net.minecraft.commands.Commands.hasPermission(net.minecraft.commands.Commands.LEVEL_GAMEMASTERS));
 
         // give
         builder.then(Commands.literal("give")
                 .then(Commands.argument("players", EntityArgument.players())
-                        .then(Commands.argument("bagType", ResourceLocationArgument.id())
+                        .then(Commands.argument("bagType", IdentifierArgument.id())
                                 .suggests(bagTypeSuggestions)
                                 .executes(context ->
                                         giveBags(context, 1))
@@ -57,7 +57,7 @@ public final class TreasureBagsCommand {
     }
 
     private static int giveBags(CommandContext<CommandSourceStack> context, int bagCount) throws CommandSyntaxException {
-        var bagTypeId = ResourceLocationArgument.getId(context, "bagType");
+        var bagTypeId = IdentifierArgument.getId(context, "bagType");
         var bagType = TbRegistries.BAG_TYPE.get(bagTypeId);
         if (bagType == null) {
             context.getSource().sendFailure(translate("give.invalid", bagTypeId.toString()));
@@ -75,7 +75,7 @@ public final class TreasureBagsCommand {
 
     private static int listBagTypes(CommandContext<CommandSourceStack> context) {
         String str = TbRegistries.BAG_TYPE.keySet().stream()
-                .map(ResourceLocation::toString)
+                .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
         context.getSource().sendSuccess(() -> Component.literal(str), true);
         return 1;

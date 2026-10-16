@@ -10,7 +10,7 @@ import net.silentchaos512.treasurebags.loot.BagDropLootModifier;
 public final class DataGenerators {
     private DataGenerators() {}
 
-    public static void gatherData(GatherDataEvent event) {
+    public static void gatherData(GatherDataEvent.Client event) {
         DataGenerator gen = event.getGenerator();
         var packOutput = event.getGenerator().getPackOutput();
         var lookupProvider = event.getLookupProvider();
@@ -21,7 +21,7 @@ public final class DataGenerators {
         gen.addProvider(true, new GlobalLootModifierProvider(packOutput, lookupProvider, TreasureBags.MOD_ID) {
             @Override
             protected void start() {
-                add("bag_drops", new BagDropLootModifier(new LootItemCondition[0]));
+                add("bag_drops", new BagDropLootModifier(new LootItemCondition[0], net.neoforged.neoforge.common.loot.IGlobalLootModifier.DEFAULT_PRIORITY));
             }
         });
     }

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.silentchaos512.lib.util.Color;
@@ -19,7 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class BagTypeBuilder {
-    final ResourceLocation bagTypeId;
+    final Identifier bagTypeId;
     private final String group;
     private final Rarity rarity;
     private final ResourceKey<LootTable> lootTable;
@@ -30,7 +30,7 @@ public class BagTypeBuilder {
     private int bagOverlayColor;
     private int bagStringColor;
 
-    public BagTypeBuilder(ResourceLocation bagTypeId, String group, Rarity rarity, ResourceKey<LootTable> lootTable) {
+    public BagTypeBuilder(Identifier bagTypeId, String group, Rarity rarity, ResourceKey<LootTable> lootTable) {
         this.bagTypeId = bagTypeId;
         this.group = group;
         this.rarity = rarity;

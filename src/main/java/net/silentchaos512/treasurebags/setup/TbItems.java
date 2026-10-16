@@ -13,9 +13,9 @@ import java.util.function.Supplier;
 public final class TbItems {
     public static DeferredRegister.Items ITEMS = DeferredRegister.createItems(TreasureBags.MOD_ID);
 
-    public static final DeferredItem<TreasureBagItem> TREASURE_BAG = register(
+    public static final DeferredItem<TreasureBagItem> TREASURE_BAG = ITEMS.registerItem(
             "treasure_bag",
-            () -> new TreasureBagItem(new Item.Properties())
+            TreasureBagItem::new
     );
 
     private TbItems() {}

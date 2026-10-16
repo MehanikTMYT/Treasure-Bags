@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@org.jspecify.annotations.NullMarked
 package net.silentchaos512.treasurebags.compat.jei;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+
 
 import javax.annotation.ParametersAreNonnullByDefault;

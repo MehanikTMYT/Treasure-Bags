@@ -1,6 +1,6 @@
 package net.silentchaos512.treasurebags.setup;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.silentchaos512.treasurebags.api.IEntityGroup;
 import net.silentchaos512.treasurebags.lib.StandardEntityGroups;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public final class EntityGroups {
-    private static final Map<ResourceLocation, IEntityGroup> GROUPS = new HashMap<>();
+    private static final Map<Identifier, IEntityGroup> GROUPS = new HashMap<>();
 
     private EntityGroups() {}
 
@@ -22,7 +22,7 @@ public final class EntityGroups {
         }
     }
 
-    public static IEntityGroup getOrCreate(ResourceLocation id, Function<ResourceLocation, IEntityGroup> factory) {
+    public static IEntityGroup getOrCreate(Identifier id, Function<Identifier, IEntityGroup> factory) {
         return GROUPS.computeIfAbsent(id, factory);
     }
 

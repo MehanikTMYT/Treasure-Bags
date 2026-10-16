@@ -5,21 +5,19 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
+
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.lib.item.LootContainerItem;
 import net.silentchaos512.treasurebags.Config;
 import net.silentchaos512.treasurebags.TreasureBags;
@@ -36,7 +34,7 @@ import java.util.List;
 
 public class TreasureBagItem extends LootContainerItem {
     public TreasureBagItem(Properties properties) {
-        super(TreasureBags.getId("default_bag"), true, properties);
+        super(true, properties);
     }
 
     public ItemStack stackOfType(BagType type) {
@@ -55,14 +53,14 @@ public class TreasureBagItem extends LootContainerItem {
      * @param typeName The type ID
      * @return A stack of one treasure bag
      */
-    public ItemStack stackOfType(ResourceLocation typeName) {
+    public ItemStack stackOfType(Identifier typeName) {
         ItemStack result = new ItemStack(this);
         return setBagType(result, typeName);
     }
 
     @Nullable
     public static BagType getBagType(ItemStack stack) {
-        ResourceLocation id = stack.get(TbDataComponents.BAG_TYPE);
+        Identifier id = stack.get(TbDataComponents.BAG_TYPE);
         return id != null ? TbRegistries.BAG_TYPE.get(id) : null;
     }
 
@@ -74,14 +72,14 @@ public class TreasureBagItem extends LootContainerItem {
      * @param bagTypeId The bag type ID
      * @return The bag (modified original, not a copy)
      */
-    public static ItemStack setBagType(ItemStack stack, ResourceLocation bagTypeId) {
+    public static ItemStack setBagType(ItemStack stack, Identifier bagTypeId) {
         stack.set(TbDataComponents.BAG_TYPE, bagTypeId);
         return stack;
     }
 
     public static ItemStack setBagProperties(ItemStack stack, BagType type) {
         setBagType(stack, TbRegistries.BAG_TYPE.getKey(type));
-        setLootTable(stack, type.lootTable());
+        stack.set(DataComponents.CONTAINER_LOOT, new net.minecraft.world.item.component.SeededContainerLoot(type.lootTable(), 0L));
         stack.set(DataComponents.RARITY, type.rarity());
         return stack;
     }
@@ -106,7 +104,6 @@ public class TreasureBagItem extends LootContainerItem {
         return super.getName(stack);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack, int tintIndex) {
         BagType bagType = getBagType(stack);
         if (bagType != null) {
@@ -118,7 +115,8 @@ public class TreasureBagItem extends LootContainerItem {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, TooltipContext tooltipContext, @Nonnull List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(@Nonnull ItemStack stack, TooltipContext tooltipContext, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> tooltipConsumer, TooltipFlag flag) {
+        List<Component> tooltip = new ArrayList<>();
         var type = getBagType(stack);
         var typeId = type != null ? TbRegistries.BAG_TYPE.getKey(type) : null;
         var typeName = typeId != null ? typeId.toString() : "null";
@@ -126,12 +124,13 @@ public class TreasureBagItem extends LootContainerItem {
         appendInfoPair(tooltip, flag, true, "type", typeName);
         if (type != null) {
             appendInfoPair(tooltip, flag, true, "group", type.group());
-            appendInfoPair(tooltip, flag, true, "lootTable", type.lootTable().location().toString());
+            appendInfoPair(tooltip, flag, true, "lootTable", type.lootTable().identifier().toString());
         } else {
             tooltip.add(Component.translatable(this.getDescriptionId() + ".invalidType")
                     .withStyle(ChatFormatting.RED));
         }
         appendInfoPair(tooltip, flag, false, "packName", typeId != null ? typeId.getNamespace() : "null");
+        tooltip.forEach(tooltipConsumer);
     }
 
     private void appendInfoPair(List<Component> tooltip, TooltipFlag flag, boolean advancedOnly, String key, String value) {
@@ -158,10 +157,10 @@ public class TreasureBagItem extends LootContainerItem {
 
     @Nonnull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, @Nonnull InteractionHand handIn) {
+    public InteractionResult use(Level worldIn, Player playerIn, @Nonnull InteractionHand handIn) {
         ItemStack heldItem = playerIn.getItemInHand(handIn);
         if (!(playerIn instanceof ServerPlayer)) {
-            return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
+            return InteractionResult.SUCCESS;
         }
         ServerPlayer playerMP = (ServerPlayer) playerIn;
 
@@ -170,7 +169,7 @@ public class TreasureBagItem extends LootContainerItem {
         Collection<ItemStack> lootDrops = getDropsFromStack(heldItem, playerMP, openWholeStack);
         if (lootDrops.isEmpty()) {
             TreasureBags.LOGGER.warn("No drops from bag, is the loot table valid? {}, table={}", heldItem, getLootTable(heldItem));
-            return new InteractionResultHolder<>(InteractionResult.FAIL, heldItem);
+            return InteractionResult.FAIL;
         }
         lootDrops.forEach(stack -> {
             giveOrDropItem(playerIn, stack.copy());
@@ -182,7 +181,7 @@ public class TreasureBagItem extends LootContainerItem {
                 SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F,
                 ((playerMP.getRandom().nextFloat() - playerMP.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
         heldItem.shrink(openWholeStack ? heldItem.getCount() : 1);
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
+        return InteractionResult.SUCCESS;
     }
 
     private void giveOrDropItem(Player playerIn, ItemStack copy) {

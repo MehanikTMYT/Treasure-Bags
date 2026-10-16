@@ -5,7 +5,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.registration.ISubtypeRegistration;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.treasurebags.TreasureBags;
 import net.silentchaos512.treasurebags.setup.TbItems;
@@ -13,10 +13,10 @@ import net.silentchaos512.treasurebags.setup.TbRegistries;
 
 @JeiPlugin
 public class TreasureBagsJeiPlugin implements IModPlugin {
-    private static final ResourceLocation PLUGIN_UID = TreasureBags.getId("plugin/main");
+    private static final Identifier PLUGIN_UID = TreasureBags.getId("plugin/main");
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return PLUGIN_UID;
     }
 
@@ -31,11 +31,6 @@ public class TreasureBagsJeiPlugin implements IModPlugin {
                         return bagType != null ? TbRegistries.BAG_TYPE.getKey(bagType).toString() : "null";
                     }
 
-                    @Override
-                    public String getLegacyStringSubtypeInfo(ItemStack ingredient, UidContext context) {
-                        var bagType = TbRegistries.BAG_TYPE.typeFromBag(ingredient);
-                        return bagType != null ? TbRegistries.BAG_TYPE.getKey(bagType).toString() : "null";
-                    }
                 }
         );
     }

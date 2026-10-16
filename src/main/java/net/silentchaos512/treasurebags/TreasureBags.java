@@ -1,6 +1,6 @@
 package net.silentchaos512.treasurebags;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -30,7 +30,7 @@ public final class TreasureBags {
 
     public TreasureBags(IEventBus modEventBus, ModContainer modContainer) {
         INSTANCE = this;
-        PROXY = FMLEnvironment.dist == Dist.CLIENT
+        PROXY = FMLEnvironment.getDist() == Dist.CLIENT
                 ? new SideProxy.Client(modEventBus)
                 : new SideProxy.Server(modEventBus);
 
@@ -47,22 +47,22 @@ public final class TreasureBags {
     }
 
     public static boolean isDevBuild() {
-        return "NONE".equals(getVersion()) || !FMLLoader.isProduction();
+        return "NONE".equals(getVersion()) || !FMLLoader.getCurrent().isProduction();
     }
 
-    public static ResourceLocation getId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier getId(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @Nullable
-    public static ResourceLocation getIdWithDefaultNamespace(String name) {
+    public static Identifier getIdWithDefaultNamespace(String name) {
         if (name.contains(":")) {
-            return ResourceLocation.tryParse(name);
+            return Identifier.tryParse(name);
         }
-        return ResourceLocation.tryParse(MOD_ID + ":" + name);
+        return Identifier.tryParse(MOD_ID + ":" + name);
     }
 
-    public static String shortenId(@Nullable ResourceLocation id) {
+    public static String shortenId(@Nullable Identifier id) {
         if (id == null) {
             return "null";
         }

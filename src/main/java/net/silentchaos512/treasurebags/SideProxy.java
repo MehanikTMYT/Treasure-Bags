@@ -10,7 +10,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 import net.silentchaos512.lib.util.LootUtils;
@@ -41,7 +41,7 @@ class SideProxy {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        InitialSpawnItems.add(STARTING_INVENTORY.location(), p -> {
+        InitialSpawnItems.add(STARTING_INVENTORY.identifier(), p -> {
             if (p instanceof ServerPlayer) {
                 return LootUtils.gift(STARTING_INVENTORY, (ServerPlayer) p);
             }
@@ -49,8 +49,8 @@ class SideProxy {
         });
     }
 
-    private void onAddReloadListener(AddReloadListenerEvent event) {
-        event.addListener(TbRegistries.BAG_TYPE);
+    private void onAddReloadListener(AddServerReloadListenersEvent event) {
+        event.addListener(TreasureBags.getId("bag_types"), TbRegistries.BAG_TYPE);
     }
 
     private void onRegisterCommands(RegisterCommandsEvent event) {
@@ -67,8 +67,8 @@ class SideProxy {
         private void clientSetup(FMLClientSetupEvent event) {
         }
 
-        private void onItemColors(RegisterColorHandlersEvent.Item event) {
-            event.register(TreasureBagItem::getColor, TbItems.TREASURE_BAG);
+        private void onItemColors(RegisterColorHandlersEvent.ItemTintSources event) {
+            event.register(TreasureBags.getId("bag"), net.silentchaos512.treasurebags.client.BagTintSource.CODEC);
         }
     }
 

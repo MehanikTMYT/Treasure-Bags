@@ -1,0 +1,20 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "treasurebags:item/treasure_bag",
+    "tints": [
+      {
+        "type": "treasurebags:bag",
+        "layer": 0
+      },
+      {
+        "type": "treasurebags:bag",
+        "layer": 1
+      },
+      {
+        "type": "treasurebags:bag",
+        "layer": 2
+      }
+    ]
+  }
+}

@@ -2,7 +2,7 @@ package net.silentchaos512.treasurebags.lib;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +32,7 @@ public enum StandardEntityGroups implements IEntityGroup {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return TreasureBags.getId(this.getName());
     }
 
