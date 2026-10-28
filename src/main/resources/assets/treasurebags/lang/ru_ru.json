@@ -1,0 +1,23 @@
+{
+  "bag.treasurebags.dungeon": "Подземный мешок",
+  "bag.treasurebags.ender": "Эндовый мешок",
+  "bag.treasurebags.food": "Мешок с навынос",
+  "bag.treasurebags.gag": "Шуточный мешок",
+  "bag.treasurebags.ingots": "Плавильный праздничный мешок",
+  "bag.treasurebags.literacy": "Учёный мешок",
+  "bag.treasurebags.nature": "Природный мешок",
+  "bag.treasurebags.nether": "Мешок Нижнего мира",
+  "bag.treasurebags.ocean": "Океанский мешок",
+  "bag.treasurebags.player": "Игровой мешок",
+  "bag.treasurebags.spawn": "Первый мешок",
+  "bag.treasurebags.sticks_and_stones": "Мешок «палки и камни»",
+  "command.treasurebags.give.invalid": "Неверный тип мешка: %s",
+  "command.treasurebags.give.success": "Выдано %1$sx %2$s игроку %3$s",
+  "item.treasurebags.treasure_bag": "Мешок с сокровищами",
+  "item.treasurebags.treasure_bag.group": "Группа§r: %s",
+  "item.treasurebags.treasure_bag.invalidType": "Неверный тип",
+  "item.treasurebags.treasure_bag.lootTable": "Таблица лута§r: %s",
+  "item.treasurebags.treasure_bag.packName": "Набор§r: %s",
+  "item.treasurebags.treasure_bag.type": "Тип§r: %s",
+  "item.treasurebags.treasure_bag.unknownType": "Неизвестный тип"
+}
